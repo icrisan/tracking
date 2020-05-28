@@ -8,6 +8,6 @@ def main():
 
 
 def get_pytest_args():
-    pytest_args = ['-vs', './tests']
+    pytest_args = ['-vs', '../tests']
 
     return pytest_args
