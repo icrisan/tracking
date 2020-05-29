@@ -1,6 +1,7 @@
-
 from utils.logger_util import *
+
 logger = logging.getLogger(__name__)
+
 
 class Plugin:
 
@@ -9,7 +10,6 @@ class Plugin:
         :param _pytest.main.Session session: the pytest session object.
         """
         logger.info('Session successfully started!')
-
 
     def pytest_sessionfinish(self, session=None):
         """Called after whole test run finished, right before returning the exit status to the system.

@@ -3,14 +3,10 @@ import requests
 
 class ApiMaster(object):
 
-
-
-
-
     @staticmethod
-    def make_request(method,url, query_params=None, body=None):
+    def make_request(method, url, query_params=None, body=None):
         """
-                Builds a Http request .
+                Builds a Http request.
 
                 :param method: GET/POST/PUT/DELETE
                 :param url: Request Url
