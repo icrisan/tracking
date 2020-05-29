@@ -16,7 +16,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'tracking = tracking.scripts.main:main'
+            'tracking = scripts.main:main'
         ]
     }
 )

@@ -1,5 +1,5 @@
 import pytest
-from scripts.api.plugin import Plugin
+from scripts.plugin import Plugin
 
 
 def main():
@@ -8,6 +8,6 @@ def main():
 
 
 def get_pytest_args():
-    pytest_args = ['-vs', '../tests']
+    pytest_args = ['-vs', './tests']
 
     return pytest_args
