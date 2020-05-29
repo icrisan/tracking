@@ -1,5 +1,7 @@
-from logging.logger import *
 
+
+from utils.logger_util import *
+logger = logging.getLogger(__name__)
 
 def test_plugin():
-    logging.info('PASS')
+    logger.info('TEST HAS PASSED')
