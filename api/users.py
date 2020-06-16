@@ -1,11 +1,13 @@
 from api.api import ApiMaster
 from api.enum import Method
 from collections import UserList
+from api.user import User
 
 
 class Users(object):
     response = None
     users_list = UserList()
+    user_list = UserList()
 
     def __init__(self):
         pass
@@ -24,3 +26,11 @@ class Users(object):
                                           body=None)
 
         return response
+
+    def get_user_objects_list(self):
+        for obj in self.users_list:
+            self.user_list.append(
+                User(obj['id'], obj['first_name'], obj['last_name'], obj['gender'], obj['dob'], obj['email'],
+                     obj['phone'], obj['website'], obj['address'], obj['status']))
+
+        return self.user_list
