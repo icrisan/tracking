@@ -17,4 +17,9 @@ def test_user_list():
     print('-----------')
     print(Users.get_response(self=users))
     print('-----------')
-    print(Users.get_user_objects_list(self=users))
+
+    print(Users._get_user_objects_list(self=users))
+    print('-----------')
+    print(Users.is_key_found(self=users, key='first_name'))
+    print('-----------')
+    print(Users.is_key_found(self=users, key='first_cucu'))
