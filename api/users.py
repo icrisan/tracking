@@ -30,7 +30,8 @@ class Users(object):
 
         return __response
 
-    def get_user_objects_list(self):
+    # private method
+    def __get_user_objects_list(self):
         for obj in self.users_list:
             self.__user_list.append(
                 User(obj['id'], obj['first_name'], obj['last_name'], obj['gender'], obj['dob'], obj['email'],
@@ -38,11 +39,18 @@ class Users(object):
 
         return self.__user_list
 
-    def is_found(self, objects_list, key, val):
-        is_found = False
+    def is_found(self, obj_to_find, objects_list):
+        found = False
+        items = obj_to_find.__dict__.items()
+
         for obj in objects_list:
-            for attr in obj:
-                if attr == key and obj[attr] == val:
-                    is_found = True
+            if found:
+                break
+            for attr, value in items:
+                if obj[attr] == value:
+                    found = True
+                if obj[attr] != value and value is not None:
+                    found = False
                     break
-        return is_found
+
+        return found
