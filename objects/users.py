@@ -1,6 +1,7 @@
-from api.api import ApiMaster
-from api.enum import Method
-from api.user import User
+from objects.api import ApiMaster
+from objects.enum import Method
+from objects.user import User
+from objects.parsers import is_found
 
 
 class Users(object):
@@ -39,18 +40,5 @@ class Users(object):
 
         return self.__user_list
 
-    def is_found(self, obj_to_find, objects_list):
-        found = False
-        items = obj_to_find.__dict__.items()
-
-        for obj in objects_list:
-            if found:
-                break
-            for attr, value in items:
-                if obj[attr] == value:
-                    found = True
-                if obj[attr] != value and value is not None:
-                    found = False
-                    break
-
-        return found
+    def check_user(self, user, users_list):
+        return is_found(user, users_list)

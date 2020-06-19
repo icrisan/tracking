@@ -1,5 +1,5 @@
-from api.api import ApiMaster
-from api.enum import Method
+from objects.api import ApiMaster
+from objects.enum import Method
 
 
 def test_api():
@@ -11,7 +11,7 @@ def test_api():
 
     found = False
     for obj in json['result']:
-        if obj["id"] == "1805":
+        if obj["id"] == "1840":
             found = True
             break
 
