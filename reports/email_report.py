@@ -1,33 +1,51 @@
 import smtplib
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from socket import gaierror
 
 
 class EmailReport(object):
-    sender_address = None
-    sender_pass = None
-    receiver_address = None
-    session = None
-    message = None
+    __sender_address = None
+    __sender_pass = None
+    __receiver_address = None
+    __email = None
 
     def __init__(self, mail_content):
-        self.sender_address = 'grozamariaelena@gmail.com'
-        self.sender_pass = 'Test123!'
-        self.receiver_address = 'yoannacrisan@gmail.com'
-        self.__set_body(mail_content)
+        self.__sender_address = 'grozamariaelena@gmail.com'
+        self.__sender_pass = 'Test123!'
+        self.__receiver_address = 'yoannacrisan@gmail.com'
+        self.__configure_email(mail_content)
         self.__set_session()
 
     # private method
-    def __set_body(self, mail_content):
+    def __configure_email(self, mail_content):
         # Setup the MIME
-        self.message = MIMEMultipart()
-        self.message['From'] = self.sender_address
-        self.message['To'] = self.receiver_address
-        self.message['Subject'] = 'A test mail sent by Python. It has an attachment.'  # The subject line
+        self.__email = MIMEMultipart()
+        self.__email['From'] = self.__sender_address
+        self.__email['To'] = self.__receiver_address
+        self.__email['Subject'] = 'A test mail sent by Python. It has an attachment.'  # The subject line
 
         # The body and the attachments for the mail
-        self.message.attach(MIMEText(mail_content, 'plain'))
+        with open('utils/app.log', "rb") as attachment:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(attachment.read())
+
+            # Encode file in ASCII characters to send by email
+            encoders.encode_base64(part)
+
+            # Add header as key/value pair to attachment part
+            part.add_header(
+                "Content-Disposition",
+                f"attachment; filename= {'app.log'}",
+            )
+
+            self.__email.attach(part)
+        self.__email.attach(MIMEText(
+            " Test_Run_Details: {}\n" +
+            mail_content
+        ))
 
     # private method
     def __set_session(self):
@@ -35,9 +53,9 @@ class EmailReport(object):
         try:
             session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
             session.starttls()  # enable security
-            session.login(self.sender_address, self.sender_pass)  # login with mail_id and password
-            text = self.message.as_string()
-            session.sendmail(self.sender_address, self.receiver_address, text)
+            session.login(self.__sender_address, self.__sender_pass)  # login with mail_id and password
+            text = self.__email.as_string()
+            session.sendmail(self.__sender_address, self.__receiver_address, text)
             session.quit()
             print('Mail Sent')
         except (gaierror, ConnectionRefusedError):
