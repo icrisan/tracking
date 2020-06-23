@@ -3,12 +3,12 @@ from objects.users import Users
 
 
 def test_user_list():
-    user = User(id="1840", first_name="Pasquale", last_name="Lind", gender="female", dob="1933-10-22",
-                email="kavon67@example.com", phone="984.723.4385 x80657",
-                website="http://pfannerstill.info/esse-vel-cum-id-et-quis-inventore",
-                address="8292 Bruen Extensions\nNew Chloehaven, SD 15313", status="active")
+    user = User(id="1854", first_name="Consuelo", last_name="Morissette", gender="male", dob="1935-07-18",
+                email="zetta23@example.net", phone="(561) 326-6099 x6922",
+                website="http://kuhn.net/cumque-quisquam-illum-necessitatibus-ut-laborum-placeat",
+                address="694 Cronin Shore\nDionfurt, IL 55781-1993", status="inactive")
 
     users = Users()
 
-    print(users.get_users())
+    users.get_users()
     assert users.check_user(user, users.users_list) is True
