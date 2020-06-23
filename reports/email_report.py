@@ -1,4 +1,5 @@
 import smtplib
+from datetime import datetime
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
@@ -25,7 +26,7 @@ class EmailReport(object):
         self.__email = MIMEMultipart()
         self.__email['From'] = self.__sender_address
         self.__email['To'] = self.__receiver_address
-        self.__email['Subject'] = 'A test mail sent by Python. It has an attachment.'  # The subject line
+        self.__email['Subject'] = 'Test report ' + str(datetime.now())
 
         # The body and the attachments for the mail
         with open('utils/app.log', "rb") as attachment:
