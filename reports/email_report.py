@@ -6,6 +6,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from socket import gaierror
 
+from config_util.config_manager import parse_config_file
+
 
 class EmailReport(object):
     __sender_address = None
@@ -14,9 +16,9 @@ class EmailReport(object):
     __email = None
 
     def __init__(self, mail_content):
-        self.__sender_address = 'grozamariaelena@gmail.com'
-        self.__sender_pass = 'Test123!'
-        self.__receiver_address = 'yoannacrisan@gmail.com'
+        self.__sender_address = parse_config_file('Email').get('username')
+        self.__sender_pass = parse_config_file('Email').get('password')
+        self.__receiver_address = parse_config_file('Email').get('receiver')
         self.__configure_email(mail_content)
         self.__set_session()
 
@@ -52,7 +54,7 @@ class EmailReport(object):
     def __set_session(self):
         # Create SMTP session for sending the mail
         try:
-            session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
+            session = smtplib.SMTP('smtp.gmail.com', parse_config_file('Email').get('port'))  # use gmail with port
             session.starttls()  # enable security
             session.login(self.__sender_address, self.__sender_pass)  # login with mail_id and password
             text = self.__email.as_string()
