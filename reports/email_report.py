@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from socket import gaierror
 
-from config_util.config_manager import parse_config_file
+from config_util.config_manager import *
 
 
 class EmailReport(object):
@@ -41,7 +41,7 @@ class EmailReport(object):
             # Add header as key/value pair to attachment part
             part.add_header(
                 "Content-Disposition",
-                f"attachment; filename= {'app.log'}",
+                f"attachment; filename= {'logs/app.log'}",
             )
 
             self.__email.attach(part)
