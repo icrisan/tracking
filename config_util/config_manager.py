@@ -23,7 +23,7 @@ def parse_config_file(section):
             if dictionary[option] == -1:
                 logger.debug("skip: %s" % option)
         except:
-            print("exception on %s!" % option)
+            logger.debug("exception on %s!" % option)
             dictionary[option] = None
 
     return dictionary

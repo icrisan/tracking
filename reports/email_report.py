@@ -54,7 +54,7 @@ class EmailReport(object):
     def __set_session(self):
         # Create SMTP session for sending the mail
         try:
-            session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
+            session = smtplib.SMTP('smtp.gmail.com', parse_config_file('Email').get('port'))  # use gmail with port
             session.starttls()  # enable security
             session.login(self.__sender_address, self.__sender_pass)  # login with mail_id and password
             text = self.__email.as_string()
