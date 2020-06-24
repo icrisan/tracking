@@ -1,6 +1,6 @@
 import logging
 
-LOG_FILENAME = 'utils/app.log'
+LOG_FILENAME = 'logs/app.log'
 
 logging.basicConfig(filename=LOG_FILENAME,
                     filemode='w',
