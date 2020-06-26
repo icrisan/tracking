@@ -4,9 +4,14 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from socket import gaierror
+from utils.logger_util import *
+from config_util.config_manager import  get_config_property
 
-from config_util.config_manager import *
+logger = logging.getLogger(__name__)
+
+
+class EmailError(object):
+    pass
 
 
 class EmailReport(object):
@@ -16,9 +21,14 @@ class EmailReport(object):
     __email = None
 
     def __init__(self, mail_content):
-        self.__sender_address = parse_config_file('Email').get('username')
-        self.__sender_pass = parse_config_file('Email').get('password')
-        self.__receiver_address = parse_config_file('Email').get('receiver')
+        logger.info(
+            " --------------------------------------------------------- "
+            + "Starting Email report:"
+            + " ----------------------------------------------------------\n"
+        )
+        self.__sender_address = get_config_property('Email','username')
+        self.__sender_pass = get_config_property('Email','password')
+        self.__receiver_address = get_config_property('Email','receiver')
         self.__configure_email(mail_content)
         self.__set_session()
 
@@ -31,7 +41,7 @@ class EmailReport(object):
         self.__email['Subject'] = 'Test report ' + str(datetime.now())
 
         # The body and the attachments for the mail
-        with open('utils/app.log', "rb") as attachment:
+        with open('logs/app.log', "rb") as attachment:
             part = MIMEBase("application", "octet-stream")
             part.set_payload(attachment.read())
 
@@ -46,7 +56,6 @@ class EmailReport(object):
 
             self.__email.attach(part)
         self.__email.attach(MIMEText(
-            " Test_Run_Details: {}\n" +
             mail_content
         ))
 
@@ -54,16 +63,30 @@ class EmailReport(object):
     def __set_session(self):
         # Create SMTP session for sending the mail
         try:
-            session = smtplib.SMTP('smtp.gmail.com', parse_config_file('Email').get('port'))  # use gmail with port
+            session = smtplib.SMTP('smtp.gmail.com', get_config_property('Email','port'))  # use gmail with port
             session.starttls()  # enable security
-            session.login(self.__sender_address, self.__sender_pass)  # login with mail_id and password
+            try:
+                session.login(self.__sender_address, self.__sender_pass)
+            except Exception:
+                raise EmailError(
+                    "User not logged into server. Please check your credentials."
+                )
+            else:
+                logger.info("User successfully logged into email server")
             text = self.__email.as_string()
-            session.sendmail(self.__sender_address, self.__receiver_address, text)
-            session.quit()
-            print('Mail Sent')
-        except (gaierror, ConnectionRefusedError):
-            print('Failed to connect to the server. Bad connection settings?')
-        except smtplib.SMTPServerDisconnected:
-            print('Failed to connect to the server. Wrong user/password?')
-        except smtplib.SMTPException as e:
-            print('SMTP error occurred: ' + str(e))
+
+            try:
+                session.sendmail(self.__sender_address, self.__receiver_address, text)
+            except Exception:
+                raise EmailError(
+                    "Email was not sent."
+                )
+            else:
+                session.quit()
+                logger.info("Email successfully sent to %s" % self.targets)
+        except:
+            logger.info("Email successfully sent to %s" )
+
+                
+
+
