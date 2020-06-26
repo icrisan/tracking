@@ -43,16 +43,16 @@ class Plugin:
         self.end_time = time.time()
 
         footer = create_footer(self)
-        footer.print_report_footer()
+        test_res = footer.print_report_footer()
 
         if results.email is not None:
             logger.info("Sending email report")
-            # try:
-            #     EmailReport("asdasda")
-            # except SyntaxError:
-            #     logger.error(
-            #         "Problem with email report - check config file for correct values."
-            #     )
+            try:
+                EmailReport(test_res)
+            except SyntaxError:
+                logger.error(
+                    "Problem with email report - check config file for correct values."
+                )
         
 
 
